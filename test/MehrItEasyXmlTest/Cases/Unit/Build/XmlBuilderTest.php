@@ -1633,4 +1633,172 @@
 
 		}
 
+		public function testTernary_truthy_closures() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$exp = 'name';
+
+			$this->assertSame($builder, $builder->ternary(
+				$exp,
+				function ($v) {
+					return 'then:' . $v;
+				},
+				function ($v) {
+					return 'else:' . $v;
+				}
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>then:name", $builder->output());
+
+		}
+
+		public function testTernary_falsy_closures() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$exp = 0;
+
+			$this->assertSame($builder, $builder->ternary(
+				$exp,
+				function ($v) {
+					return 'then:' . $v;
+				},
+				function ($v) {
+					return 'else:' . $v;
+				}
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>else:0", $builder->output());
+
+		}
+
+		public function testTernary_truthy_values() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$exp = 'name';
+
+			$this->assertSame($builder, $builder->ternary(
+				$exp,
+				'then',
+				'else'
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>then", $builder->output());
+
+		}
+
+		public function testTernary_falsy_values() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$exp = null;
+
+			$this->assertSame($builder, $builder->ternary(
+				$exp,
+				'then',
+				'else'
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>else", $builder->output());
+
+		}
+
+		public function testTernary_closure_truthy_closures() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->ternary(
+				function() {
+					return 'name';
+				},
+				function ($v) {
+					return 'then:' . $v;
+				},
+				function ($v) {
+					return 'else:' . $v;
+				}
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>then:name", $builder->output());
+
+		}
+
+		public function testTernary_closure_falsy_closures() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->ternary(
+				function () {
+					return 0;
+				},
+				function ($v) {
+					return 'then:' . $v;
+				},
+				function ($v) {
+					return 'else:' . $v;
+				}
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>else:0", $builder->output());
+
+		}
+
+		public function testTernary_closure_truthy_values() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->ternary(
+				function () {
+					return 'name';
+				},
+				'then',
+				'else'
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>then", $builder->output());
+
+		}
+
+		public function testTernary_closure_falsy_values() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->ternary(
+				function () {
+					return null;
+				},
+				'then',
+				'else'
+			));
+
+
+			$this->assertSame("{$this->docStart}<root>else", $builder->output());
+
+		}
+
 	}

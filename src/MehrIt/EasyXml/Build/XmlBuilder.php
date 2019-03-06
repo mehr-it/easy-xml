@@ -11,6 +11,7 @@
 
 	use MehrIt\EasyXml\Build\Serialize\EachSerializer;
 	use MehrIt\EasyXml\Build\Serialize\MapSerializer;
+	use MehrIt\EasyXml\Build\Serialize\TernarySerializer;
 	use MehrIt\EasyXml\Build\Serialize\WhenSerializer;
 	use MehrIt\EasyXml\Contracts\XmlSerializable;
 	use MehrIt\EasyXml\Exception\XmlException;
@@ -572,6 +573,19 @@
 		 */
 		public function when($condition, callable $callback) {
 			$this->write(new WhenSerializer($condition, $callback));
+
+			return $this;
+		}
+
+		/**
+		 * Writes one of the given values based on the given expression
+		 * @param \Closure|mixed $expression The expression. Either a vale or a closure. If truthy, the "then" argument is returned. Else the "else" argument
+		 * @param \Closure|mixed|null $then The value to write if expression is truthy. If \Closure is passed it wil receive the expression value and must return the value to write
+		 * @param \Closure|mixed|null $else The value to write if expression is falsy. If \Closure is passed it wil receive the expression value and must return the value to write
+		 * @return $this
+		 */
+		public function ternary($expression, $then, $else = null) {
+			$this->write(new TernarySerializer($expression, $then, $else));
 
 			return $this;
 		}
