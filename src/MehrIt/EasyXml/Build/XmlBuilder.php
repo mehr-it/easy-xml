@@ -498,10 +498,20 @@
 				}
 				else {
 					foreach ($data as $key => $value) {
-						if (is_int($key))
+						if (is_int($key)) {
 							$this->write($value);
-						else
+						}
+						elseif ($key[0] === '<') {
+							if (!is_array($value))
+								throw new \InvalidArgumentException("Expected array as value of key \"$key\"");
+
+							// set tag in value and write value array
+							$value['>'] = substr($key, 1);
+							$this->write($value);
+						}
+						else {
 							$this->writeElement($key, $value);
+						}
 					}
 				}
 			}

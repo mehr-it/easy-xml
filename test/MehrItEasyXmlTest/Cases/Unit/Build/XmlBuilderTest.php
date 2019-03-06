@@ -1218,6 +1218,47 @@
 			$this->assertSame("{$this->docStart}<myTag><innerTag>another Text</innerTag><anotherTag>lastTag</anotherTag></myTag>", $builder->output());
 		}
 
+		public function testWrite_tagHoldsKey_array() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+
+			$this->assertSame($builder, $builder->write([
+				'myTag' => [
+					[
+						'>' => 'innerTag',
+						'@' => 'another Text'
+					],
+					'anotherTag' => 'lastTag'
+				]
+			]));
+
+			$this->assertSame("{$this->docStart}<myTag><innerTag>another Text</innerTag><anotherTag>lastTag</anotherTag></myTag>", $builder->output());
+		}
+
+		public function testWrite_tagHoldsKey_valueHoldsAttributes_array() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+
+			$this->assertSame($builder, $builder->write([
+				'<myTag' => [
+					'@attr1' => 15,
+					'@attr2' => 'x',
+					'@' => [
+						[
+							'>' => 'innerTag',
+							'@' => 'another Text'
+						],
+						'anotherTag' => 'lastTag'
+					]
+
+				]
+			]));
+
+			$this->assertSame("{$this->docStart}<myTag attr1=\"15\" attr2=\"x\"><innerTag>another Text</innerTag><anotherTag>lastTag</anotherTag></myTag>", $builder->output());
+		}
+
 		public function testWrite_arrayWithContent_closure() {
 			$builder = new XmlBuilder();
 
