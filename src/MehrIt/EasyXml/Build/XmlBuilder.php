@@ -554,7 +554,7 @@
 		}
 
 		/**
-		 * Calls the given callback for each item of the collection with this builder
+		 * Calls the given callback for each item of the collection and writes the result
 		 * @param \Traversable|array $collection The collection
 		 * @param callable $callback The callback. Will receive the value and the key and must return the value to write
 		 * @return $this
@@ -566,7 +566,7 @@
 		}
 
 		/**
-		 * Call the given callback when either truthy value or a closure returning a truthy value is passed
+		 * Calls the given callback when either truthy value or a closure returning a truthy value is passed
 		 * @param \Closure|mixed $condition The condition. Either a vale or a closure
 		 * @param callable $callback The callback. Will receive the builder.
 		 * @return $this

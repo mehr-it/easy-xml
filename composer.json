@@ -12,7 +12,10 @@
   "autoload": {
     "psr-0": {
       "": "src/"
-    }
+    },
+    "files": [
+      "src/MehrIt/EasyXml/Build/build_functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-0": {
