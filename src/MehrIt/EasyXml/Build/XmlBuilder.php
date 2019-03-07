@@ -15,6 +15,7 @@
 	use MehrIt\EasyXml\Build\Serialize\WhenSerializer;
 	use MehrIt\EasyXml\Contracts\XmlSerializable;
 	use MehrIt\EasyXml\Exception\XmlException;
+	use MehrIt\EasyXml\Stream\StreamWrapper;
 
 	/**
 	 * Builder for creating XML (uses XMLWriter internally)
@@ -41,17 +42,26 @@
 
 		/**
 		 * Creates a new instance
-		 * @param string|null $uri The URI to write to. If empty, the builder writes to memory
+		 * @param string|null|resource $target The URI to write to, a resource or empty. If empty, the builder writes to memory
 		 */
-		public function __construct(string $uri = null) {
+		public function __construct($target = null) {
 
 			$this->writer = new \XMLWriter();
 
 			// open URI or memory
-			if ($uri)
-				$this->_e($this->writer->openUri($uri));
-			else
+			if (is_resource($target)) {
+				// resource (XMLWriter only supports URLs, so stream wrapper is used to create an URL for accessing the resource)
+				$id = StreamWrapper::register($target);
+				$this->_e($this->writer->openUri('wrapper://' . $id));
+			}
+			elseif (is_string($target)) {
+				// URI
+				$this->_e($this->writer->openUri($target));
+			}
+			else {
+				// memory
 				$this->_e($this->writer->openMemory());
+			}
 
 
 			$this->inputEncoding = mb_internal_encoding();
@@ -95,7 +105,7 @@
 		/**
 		 * Flushes the buffer
 		 * @param bool $empty Whether to empty the buffer or not
-		 * @return string|int If writing to memory, the generated XML buffer, Else, if using URI, this function will write the buffer and return the number of written bytes.
+		 * @return string|int If writing to memory, the generated XML buffer, Else this function will write the buffer and return the number of written bytes.
 		 */
 		public function flush(bool $empty = true) {
 			return $this->writer->flush($empty);

@@ -1486,6 +1486,8 @@
 
 		}
 
+
+
 		public function testFlush_memory() {
 
 			$builder = new XmlBuilder();
@@ -1497,6 +1499,27 @@
 			$this->assertSame("{$this->docStart}<my-tag/>", $builder->flush());
 			$this->assertSame('', $builder->flush());
 
+
+		}
+
+		public function testFlush_resource() {
+
+			$fd = fopen('php://temp', 'w+');
+
+
+
+			$builder = new XmlBuilder($fd);
+
+			$builder->startDocument();
+
+			$builder->writeElement('my-tag');
+
+
+			$this->assertSame(48, $builder->flush());
+			$this->assertSame(0, $builder->flush());
+
+			rewind($fd);
+			$this->assertSame("{$this->docStart}<my-tag/>", stream_get_contents($fd));
 
 		}
 
