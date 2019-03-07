@@ -56,7 +56,7 @@
 			// open URI or memory
 			if (is_resource($target)) {
 				// resource (XMLWriter only supports URLs, so stream wrapper is used to create an URL for accessing the resource)
-				$id = StreamWrapper::register($target);
+				$id = StreamWrapper::register($target, null, true);
 				$this->_e($this->writer->openUri('wrapper://' . $id));
 			}
 			elseif (is_string($target)) {

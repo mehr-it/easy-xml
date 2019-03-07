@@ -1869,4 +1869,22 @@
 			$builder->autoFlush();
 		}
 
+		public function testResourceIsKeptOpenAfterDestruct() {
+
+			$res = fopen('php://memory', 'w+');
+
+			$cb = function () use ($res) {
+				$builder = new XmlBuilder($res);
+
+				$builder->startDocument();
+				$builder->writeElement('root');
+				$builder->endDocument();
+			};
+
+			$cb();
+
+			$this->assertEquals('resource', gettype($res));
+
+		}
+
 	}

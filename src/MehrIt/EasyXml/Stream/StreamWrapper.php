@@ -31,18 +31,25 @@
 	 */
 	class StreamWrapper
 	{
+
 		/** @var resource[] */
 		private static $resources;
+
+		private static $resKeepOpen;
+
 		/** @var resource */
 		private $inner;
+
+		private $keepOpen;
 
 		/**
 		 * @param resource $resource
 		 * @param mixed $id
+		 * @param bool $keepOpen
 		 * @return string
 		 * @throws \InvalidArgumentException
 		 */
-		public static function register($resource, $id = null) {
+		public static function register($resource, $id = null, $keepOpen = false) {
 			if (!is_resource($resource)) {
 				throw new \InvalidArgumentException(sprintf('Expected an resource got "%s".', gettype($resource)));
 			}
@@ -52,10 +59,11 @@
 			}
 
 			if (null === $id) {
-				$id = sha1(time());
+				$id = uniqid();
 			}
 
 			self::$resources[$id] = $resource;
+			self::$resKeepOpen[$id] = $keepOpen;
 
 			return $id;
 		}
@@ -75,10 +83,25 @@
 		}
 
 		/**
+		 * @param $path
+		 * @return resource
+		 */
+		private function getKeepOpenFromPath($path) {
+			$id = substr($path, 10);
+
+			if (!isset(self::$resKeepOpen[$id])) {
+				throw new \InvalidArgumentException('No resource registered for id: \'' . $id . '\'.');
+			}
+
+			return self::$resKeepOpen[$id];
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function stream_open($path, $mode, $options, &$opened_path) {
 			$this->inner = $this->getInnerFromPath($path);
+			$this->keepOpen = $this->getKeepOpenFromPath($path);
 
 			return true;
 		}
@@ -87,7 +110,11 @@
 		 * @inheritdoc
 		 */
 		public function stream_close() {
-			return fclose($this->inner);
+			// check if the inner stream should be closed
+			if (!$this->keepOpen)
+				return fclose($this->inner);
+			else
+				return true;
 		}
 
 		/**
