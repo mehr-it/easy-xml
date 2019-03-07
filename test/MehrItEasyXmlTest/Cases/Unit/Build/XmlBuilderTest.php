@@ -1824,4 +1824,49 @@
 
 		}
 
+		public function testAutoFlush() {
+
+			$fd = fopen('php://memory', 'w+');
+
+			$builder = new XmlBuilder($fd);
+
+			$this->assertSame($builder, $builder->autoFlush(100));
+
+			$builder->startDocument();
+			$builder->startElement('root');
+			$builder->text(str_repeat('1', 50));
+
+			// yet nothing should be flushed
+			rewind($fd);
+			$this->assertEquals('', stream_get_contents($fd));
+
+			$builder->text(str_repeat('1', 50));
+
+			// now it should be flushed
+			rewind($fd);
+			$this->assertEquals("{$this->docStart}<root>" . str_repeat('1', 100), stream_get_contents($fd));
+
+			$builder->text(str_repeat('1', 50));
+
+			// nothing else should be flushed
+			rewind($fd);
+			$this->assertEquals("{$this->docStart}<root>" . str_repeat('1', 100), stream_get_contents($fd));
+
+			$builder->endElement();
+			$builder->endDocument();
+
+			// now, everything should be flushed
+			rewind($fd);
+			$this->assertEquals("{$this->docStart}<root>" . str_repeat('1', 150) . "</root>\n", stream_get_contents($fd));
+		}
+
+		public function testAutoFlush_memory() {
+
+			$builder = new XmlBuilder();
+
+			$this->expectException(\RuntimeException::class);
+
+			$builder->autoFlush();
+		}
+
 	}

@@ -40,6 +40,11 @@
 
 		protected $inputEncoding;
 
+		protected $usingMemory = false;
+
+		protected $autoFlush = false;
+		protected $bufferSize = 0;
+
 		/**
 		 * Creates a new instance
 		 * @param string|null|resource $target The URI to write to, a resource or empty. If empty, the builder writes to memory
@@ -61,10 +66,27 @@
 			else {
 				// memory
 				$this->_e($this->writer->openMemory());
+				$this->usingMemory = true;
 			}
 
 
 			$this->inputEncoding = mb_internal_encoding();
+		}
+
+		/**
+		 * Activates automatic flushing
+		 * @param int $bufferSize The internal buffer size. Default is 1MB. Note: the buffer size might exceed this limit because internal buffer size is not accurately calculated on every write for better performance. However, the buffer size is checked after every operation which possibly added a larger amount of data.
+		 * @return $this
+		 */
+		public function autoFlush(int $bufferSize = 1048576) {
+			if ($this->usingMemory)
+				throw new \RuntimeException('Automatic flush cannot be used when writing to memory');
+			if ($bufferSize <= 0)
+				throw new \InvalidArgumentException('Buffer size must be greater than 0');
+
+			$this->autoFlush = $bufferSize;
+
+			return $this;
 		}
 
 
@@ -90,7 +112,7 @@
 
 
 		/**
-		 * Ends the document
+		 * Ends the document. If automatic flushing is active, this will flush any remaining data.
 		 * @return $this
 		 */
 		public function endDocument() {
@@ -98,6 +120,9 @@
 				throw new XmlException('Cannot end document because no document was started or a document element is still open');
 
 			$this->_e($this->writer->endDocument());
+
+			// perform auto flush
+			$this->performAutoFlush(true);
 
 			return $this;
 		}
@@ -198,6 +223,10 @@
 			else
 				$this->_e($this->writer->startElement($name));
 
+			// auto flush
+			$this->bufferSize += strlen($prefix . $name . $uri);
+			$this->performAutoFlush();
+
 			// append attributes
 			$this->writeAttributes($attributes);
 
@@ -263,8 +292,13 @@
 				if ($prefix == 'xmlns')
 					$this->startedAttributeDefinesNamespace = $name;
 			}
-			else
+			else {
 				$this->_e($this->writer->startAttribute($name));
+			}
+
+			// auto flush
+			$this->bufferSize += strlen($prefix . $name . $uri);
+			$this->performAutoFlush();
 
 			return $this;
 		}
@@ -430,6 +464,10 @@
 
 			$this->_e($this->writer->text($data));
 
+			// auto flush
+			$this->bufferSize += strlen($data);
+			$this->performAutoFlush();
+
 			return $this;
 		}
 
@@ -453,6 +491,9 @@
 
 			$this->_e($this->writer->text($content));
 
+			// auto flush
+			$this->bufferSize += strlen($content);
+			$this->performAutoFlush();
 
 			return $this;
 		}
@@ -761,6 +802,17 @@
 			}
 
 			return $ret;
+		}
+
+		/**
+		 * Performs an automatic flush if buffer is full
+		 * @param bool $force If true, the buffer is flushed even limit is not reached
+		 */
+		protected function performAutoFlush($force = false) {
+			if ($this->autoFlush && ($force || $this->bufferSize > $this->autoFlush)) {
+				$this->flush();
+				$this->bufferSize = 0;
+			}
 		}
 
 
