@@ -9,6 +9,8 @@
 	namespace MehrIt\EasyXml\Build;
 
 
+	use Closure;
+	use InvalidArgumentException;
 	use MehrIt\EasyXml\Build\Serialize\EachSerializer;
 	use MehrIt\EasyXml\Build\Serialize\MapSerializer;
 	use MehrIt\EasyXml\Build\Serialize\TernarySerializer;
@@ -16,6 +18,10 @@
 	use MehrIt\EasyXml\Contracts\XmlSerializable;
 	use MehrIt\EasyXml\Exception\XmlException;
 	use MehrIt\EasyXml\Stream\StreamWrapper;
+	use RuntimeException;
+	use XMLWriter;
+
+	/** @noinspection PhpInconsistentReturnPointsInspection */
 
 	/**
 	 * Builder for creating XML (uses XMLWriter internally)
@@ -24,7 +30,7 @@
 	class XmlBuilder
 	{
 		/**
-		 * @var \XMLWriter
+		 * @var XMLWriter
 		 */
 		protected $writer;
 
@@ -51,7 +57,7 @@
 		 */
 		public function __construct($target = null) {
 
-			$this->writer = new \XMLWriter();
+			$this->writer = new XMLWriter();
 
 			// open URI or memory
 			if (is_resource($target)) {
@@ -80,9 +86,9 @@
 		 */
 		public function autoFlush(int $bufferSize = 1048576) {
 			if ($this->usingMemory)
-				throw new \RuntimeException('Automatic flush cannot be used when writing to memory');
+				throw new RuntimeException('Automatic flush cannot be used when writing to memory');
 			if ($bufferSize <= 0)
-				throw new \InvalidArgumentException('Buffer size must be greater than 0');
+				throw new InvalidArgumentException('Buffer size must be greater than 0');
 
 			$this->autoFlush = $bufferSize;
 
@@ -175,10 +181,10 @@
 		/**
 		 * Sets the handler for the given data type when passed as element content
 		 * @param string $type The type (as returned by gettype()) or class name
-		 * @param \Closure $handler The handler function (will receive writer instance as first argument)
+		 * @param Closure $handler The handler function (will receive writer instance as first argument)
 		 * @return $this
 		 */
-		public function setHandler($type, \Closure $handler) {
+		public function setHandler($type, Closure $handler) {
 			$this->handlers[ltrim($type, '\\')] = $handler;
 
 			return $this;
@@ -187,10 +193,10 @@
 		/**
 		 * Sets the handler for the given data type when passed as attribute value
 		 * @param string $type The type (as returned by gettype()) or class name
-		 * @param \Closure $handler The handler function (will receive writer instance as first argument)
+		 * @param Closure $handler The handler function (will receive writer instance as first argument)
 		 * @return $this
 		 */
-		public function setAttributeHandler($type, \Closure $handler) {
+		public function setAttributeHandler($type, Closure $handler) {
 			$this->attributeHandlers[ltrim($type, '\\')] = $handler;
 
 			return $this;
@@ -256,7 +262,7 @@
 		/**
 		 * Creates the given element
 		 * @param string $name The tag name
-		 * @param string|array|\Closure|XmlSerializable|null $content The content
+		 * @param string|array|Closure|XmlSerializable|null $content The content
 		 * @param array $attributes The attributes
 		 * @return $this
 		 */
@@ -498,10 +504,54 @@
 			return $this;
 		}
 
+		/**
+		 * Writes the given DTD
+		 * @param string $name The DTD name
+		 * @param string $identifier The identifier
+		 * @return $this
+		 */
+		public function writeSystemDtd(string $name, string $identifier) {
+
+			// DTD must be written before root node
+			if ($this->rootNodeExists)
+				throw new XmlException('Cannot create DTD after root node');
+
+			// encode
+			$name       = $this->encodeString($name);
+			$identifier = $this->encodeString($identifier);
+
+			$this->_e($this->writer->writeDtd($name, null, $identifier));
+
+			return $this;
+		}
+
+		/**
+		 * Writes the given DTD
+		 * @param string $name The DTD name
+		 * @param string $publicIdentifier The public identifier
+		 * @param string $systemIdentifier The system identifier
+		 * @return $this
+		 */
+		public function writePublicDtd(string $name, string $publicIdentifier, string $systemIdentifier) {
+
+			// DTD must be written before root node
+			if ($this->rootNodeExists)
+				throw new XmlException('Cannot create DTD after root node');
+
+			// encode
+			$name             = $this->encodeString($name);
+			$publicIdentifier = $this->encodeString($publicIdentifier);
+			$systemIdentifier = $this->encodeString($systemIdentifier);
+
+			$this->_e($this->writer->writeDtd($name, $publicIdentifier, $systemIdentifier));
+
+			return $this;
+		}
+
 
 		/**
 		 * Writes the given data
-		 * @param string|array|\Closure|XmlSerializable|null $data The data. This could be a simple string, an array defining an element, a closure or and XmlSerializable instance.
+		 * @param string|array|Closure|XmlSerializable|null $data The data. This could be a simple string, an array defining an element, a closure or and XmlSerializable instance.
 		 * @return $this
 		 */
 		public function write($data) {
@@ -538,7 +588,7 @@
 										break;
 
 									default:
-										throw new \InvalidArgumentException("Expected attribute name prefixed with \"@\" or \":\", got \"$k\"");
+										throw new InvalidArgumentException("Expected attribute name prefixed with \"@\" or \":\", got \"$k\"");
 
 								}
 
@@ -555,7 +605,7 @@
 						}
 						elseif ($key[0] === '<') {
 							if (!is_array($value))
-								throw new \InvalidArgumentException("Expected array as value of key \"$key\"");
+								throw new InvalidArgumentException("Expected array as value of key \"$key\"");
 
 							// set tag in value and write value array
 							$value['>'] = substr($key, 1);
@@ -567,7 +617,7 @@
 					}
 				}
 			}
-			elseif ($data instanceof \Closure) {
+			elseif ($data instanceof Closure) {
 				$data($this);
 			}
 			elseif ($data instanceof XmlSerializable) {
@@ -618,7 +668,7 @@
 
 		/**
 		 * Calls the given callback when either truthy value or a closure returning a truthy value is passed
-		 * @param \Closure|mixed $condition The condition. Either a vale or a closure
+		 * @param Closure|mixed $condition The condition. Either a vale or a closure
 		 * @param callable $callback The callback. Will receive the builder.
 		 * @return $this
 		 */
@@ -630,9 +680,9 @@
 
 		/**
 		 * Writes one of the given values based on the given expression
-		 * @param \Closure|mixed $expression The expression. Either a vale or a closure. If truthy, the "then" argument is returned. Else the "else" argument
-		 * @param \Closure|mixed|null $then The value to write if expression is truthy. If \Closure is passed it wil receive the expression value and must return the value to write
-		 * @param \Closure|mixed|null $else The value to write if expression is falsy. If \Closure is passed it wil receive the expression value and must return the value to write
+		 * @param Closure|mixed $expression The expression. Either a vale or a closure. If truthy, the "then" argument is returned. Else the "else" argument
+		 * @param Closure|mixed|null $then The value to write if expression is truthy. If \Closure is passed it wil receive the expression value and must return the value to write
+		 * @param Closure|mixed|null $else The value to write if expression is falsy. If \Closure is passed it wil receive the expression value and must return the value to write
 		 * @return $this
 		 */
 		public function ternary($expression, $then, $else = null) {

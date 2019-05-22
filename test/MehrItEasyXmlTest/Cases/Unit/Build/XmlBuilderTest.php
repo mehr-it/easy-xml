@@ -1116,6 +1116,49 @@
 			$this->assertSame("{$this->docStart}<root><![CDATA[]]>", $builder->output());
 		}
 
+		public function testWriteSystemDtd() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$this->assertSame($builder, $builder->writeSystemDtd('my-name', 'my-identifier'));
+
+			$this->assertSame("{$this->docStart}<!DOCTYPE my-name SYSTEM \"my-identifier\">", $builder->output());
+		}
+
+		public function testWriteSystemDtd_afterRootNode() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+			$builder->endElement('root');
+
+			$this->expectException(XmlException::class);
+
+			$builder->writeSystemDtd('my-name', 'my-identifier');
+
+		}
+
+		public function testWritePublicDtd() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$this->assertSame($builder, $builder->writePublicDtd('my-name', 'my-public-identifier', 'my-sys-identifier'));
+
+			$this->assertSame("{$this->docStart}<!DOCTYPE my-name PUBLIC \"my-public-identifier\" \"my-sys-identifier\">", $builder->output());
+		}
+
+		public function testWritePublicDtd_afterRootNode() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+			$builder->endElement('root');
+
+			$this->expectException(XmlException::class);
+
+			$builder->writePublicDtd('my-name', 'my-public-identifier', 'my-sys-identifier');
+		}
+
 		public function testWrite_arraySingleElement() {
 
 			$builder = new XmlBuilder();
