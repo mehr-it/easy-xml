@@ -468,6 +468,9 @@
 
 			$data = str_replace(']]>', ']]]]><![CDATA[>', $data);
 
+			// even cdata must be in correct charset, so encode it
+			$data = $this->encodeString($data);
+
 			$this->_e($this->writer->text($data));
 
 			// auto flush
@@ -486,10 +489,10 @@
 			if (!in_array(end($this->stack), ['el', 'attr', 'comment']))
 				throw new XmlException('Cannot append text outside element or attribute');
 
-			$content = $this->encodeString($content);
-
-			if (end($this->stack) == 'comment' && mb_strpos($content, '-->', 0, 'UTF-8') !== false)
+			if (end($this->stack) == 'comment' && mb_strpos($content, '-->') !== false)
 				throw new XmlException('Comment must not contain sequence "-->"');
+
+			$content = $this->encodeString($content);
 
 			// remember namespace URI if within namespace attribute
 			if ($this->startedAttributeDefinesNamespace)
