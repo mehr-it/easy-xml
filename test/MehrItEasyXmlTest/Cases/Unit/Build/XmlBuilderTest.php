@@ -155,6 +155,28 @@
 			$this->assertSame("{$this->docStart}<a:root xmlns:a=\"http://mynamespace.de/xml\"><b:myTag xmlns:b=\"http://anotherNamespace.de/xml\"/>", $builder->output());
 		}
 
+		public function testStartElementNamespace_parentDefinesSameNamespace() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$this->assertSame($builder, $builder->startElement('a:root', ['xmlns:a' => 'http://mynamespace.de/xml']));
+			$this->assertSame($builder, $builder->startElement('{http://mynamespace.de/xml}myTag'));
+			$builder->endElement();
+
+			$this->assertSame("{$this->docStart}<a:root xmlns:a=\"http://mynamespace.de/xml\"><a:myTag/>", $builder->output());
+		}
+
+		public function testStartElementNamespace_parentInSameXmlns() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$this->assertSame($builder, $builder->startElement('root', ['xmlns' => 'http://mynamespace.de/xml']));
+			$this->assertSame($builder, $builder->startElement('myTag', ['xmlns' => 'http://mynamespace.de/xml']));
+			$builder->endElement();
+
+			$this->assertSame("{$this->docStart}<root xmlns=\"http://mynamespace.de/xml\"><myTag/>", $builder->output());
+		}
+
 		public function testStartElementNamespace_redefinePrefix() {
 			$builder = new XmlBuilder();
 
@@ -185,6 +207,17 @@
 			$builder->endElement();
 
 			$this->assertSame("{$this->docStart}<z:myTag xmlns:z=\"http://mynamespace.de/xml\" z:attr=\"15\"/>", $builder->output());
+		}
+
+		public function testStartElementWithoutNamespace_parentDefinesNamespace() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+			$this->assertSame($builder, $builder->startElement('a:root', ['xmlns:a' => 'http://mynamespace.de/xml']));
+			$this->assertSame($builder, $builder->startElement('myTag'));
+			$builder->endElement();
+
+			$this->assertSame("{$this->docStart}<a:root xmlns:a=\"http://mynamespace.de/xml\"><myTag/>", $builder->output());
 		}
 
 		public function testStartElementOutsideDoc() {

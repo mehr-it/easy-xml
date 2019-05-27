@@ -206,9 +206,10 @@
 		 * Creates the start element tag
 		 * @param string $name The tag name
 		 * @param array $attributes The attributes. Name as key.
+		 * @param bool $deduplicateNamespaces True if to try to deduplicate namespaces
 		 * @return $this
 		 */
-		public function startElement(string $name, array $attributes = []) {
+		public function startElement(string $name, array $attributes = [], bool $deduplicateNamespaces = true) {
 			if (!in_array(end($this->stack), ['el', 'doc']))
 				throw new XmlException('Cannot start element outside document or another element');
 			if (end($this->stack) === 'doc' && $this->rootNodeExists)
@@ -218,7 +219,7 @@
 
 			$name = $this->encodeString($name);
 
-			$this->namespaces[] = $this->getDefinedNamespacesFromAttributes($attributes);
+			$this->namespaces[] = $this->extractNamespaces($attributes, $deduplicateNamespaces);
 
 			// parse prefix
 			[$prefix, $name, $uri] = $this->parseNamespace($name);
@@ -826,9 +827,29 @@
 		}
 
 		/**
+		 * Gets the prefix for the given namespace URI
+		 * @param string $uri
+		 * @return bool|string The prefix or `false`
+		 */
+		protected function getPrefix(string $uri) {
+			$level = count($this->namespaces) - 1;
+
+			// try to find an existing prefix for the URI
+			for ($i = $level; $i >= 0; --$i) {
+				foreach ($this->namespaces[$i] as $currPfx => $currUri) {
+					if ($currUri == $uri)
+						return $currPfx;
+
+				}
+			}
+
+			return false;
+		}
+
+		/**
 		 * Checks if the given prefix is defined
 		 * @param string $prefix The prefix
-		 * @return bool True if defined. Else false.
+		 * @return string|bool URI if defined. Else false.
 		 */
 		protected function isPrefixedDefined($prefix) {
 			foreach($this->namespaces as $namespaces) {
@@ -843,18 +864,33 @@
 
 		/**
 		 * Gets the namespaces defined in attributes
-		 * @param array $attributes The attributes. Name as key
+		 * @param array $attributes The attributes. Name as key.
+		 * @param bool $removeExisting True if to remove attributes for existing namespaces
 		 * @return string[] The namespaces. Prefix as key. URI as value.
 		 */
-		protected function getDefinedNamespacesFromAttributes(array $attributes) {
-			$ret = [];
+		protected function extractNamespaces(array &$attributes, bool $removeExisting = true) {
+			$namespaces = [];
 			foreach($attributes as $key => $value) {
-				if (substr($key, 0, 6) == 'xmlns:')
-					$ret[substr($key, 6)] = $value;
+				if ($key === 'xmlns')
+					$pfx = '';
+				elseif (substr($key, 0, 6) == 'xmlns:')
+					$pfx = substr($key, 6);
+				else
+					continue;
+
+
+				if (!$removeExisting || $this->getPrefix($value) !== $pfx) {
+					// prefix defines a new namespace
+					$namespaces[$pfx] = $value;
+				}
+				else {
+					// prefix already defined
+					unset($attributes[$key]);
+				}
 
 			}
 
-			return $ret;
+			return $namespaces;
 		}
 
 		/**
