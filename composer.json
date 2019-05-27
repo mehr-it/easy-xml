@@ -1,6 +1,6 @@
 {
   "name": "mehr-it/easy-xml",
-  "description": "Easy XML handling for large files",
+  "description": "Easy XML handling (read/write) for large files",
   "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
@@ -25,7 +25,8 @@
   "require": {
     "php": ">=7.1.0",
     "ext-xmlwriter": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "ext-xmlreader": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.4"

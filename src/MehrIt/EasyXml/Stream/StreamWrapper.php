@@ -250,6 +250,6 @@
 		 * @inheritdoc
 		 */
 		public function url_stat($path) {
-			return stat(stream_get_meta_data($this->getInnerFromPath($path))['uri']);
+			return fstat($this->getInnerFromPath($path));
 		}
 	}
