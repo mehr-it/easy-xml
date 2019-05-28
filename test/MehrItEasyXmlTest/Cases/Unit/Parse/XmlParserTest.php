@@ -778,6 +778,40 @@
 			$this->assertSame(4, $i);
 		}
 
+		public function testElEnd() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<root>
+						<el><b><c>5</c></b></el>
+					</root>";
+
+			$parser = XmlParser::fromString($xml);
+
+			$stack = [];
+
+			$parser->addCallback(new ElementStartCallback(['root', 'el', 'b'], function (XmlParser $parser) use (&$stack) {
+
+				$parser->value('c', $v);
+
+				$parser->elEnd(function() use (&$v, &$stack) {
+					$stack[] = $v;
+				});
+
+				$stack[] = 'b-called';
+
+			}));
+			$parser->addCallback(new ElementStartCallback(['root', 'el'], function (XmlParser $parser) use (&$stack) {
+
+
+				$parser->elEnd(function() use (&$v, &$stack) {
+					$stack[] = 'el-called';
+				});
+
+			}));
+			$parser->parse();
+
+			$this->assertSame(['b-called', '5', 'el-called'], $stack);
+		}
+
 		public function testParse() {
 			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 					<root></root>";

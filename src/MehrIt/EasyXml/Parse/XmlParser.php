@@ -49,6 +49,11 @@
 		protected $rootParsed = false;
 
 		/**
+		 * @var callable[]
+		 */
+		protected $endCallbacks = [];
+
+		/**
 		 * @var XmlParserCallback[][]
 		 */
 		protected $callbacks = [];
@@ -307,6 +312,22 @@
 			return $this->decodeString($this->reader->value);
 		}
 
+		/**
+		 * Adds a callback to be called when current element has completely been parsed
+		 * @param callable $callback The callback
+		 * @return XmlParser This instance
+		 */
+		public function elEnd(callable $callback) {
+
+			$this->assertParsingNotContinued();
+
+			if ($this->reader->nodeType !== XMLReader::ELEMENT)
+				throw new \RuntimeException('Cannot add element end callback for element of type ' . $this->nodeTypeName($this->reader->nodeType));
+
+			$this->endCallbacks[$this->depth][] = $callback;
+
+			return $this;
+		}
 
 		/**
 		 * Parses the document
@@ -935,6 +956,8 @@
 				$this->xmlnsStack[] = $namespaceUri;
 			else
 				$this->xmlnsStack[] = ($this->xmlnsStack[0] ?? null) !== null ? end($this->xmlnsStack) : '';
+
+			$this->endCallbacks[] = [];
 		}
 
 		/**
@@ -960,6 +983,12 @@
 
 				if (!$callbacks)
 					unset($this->callbacks[$k]);
+			}
+
+			// pop and invoke end callbacks
+			$endCallbacks = array_pop($this->endCallbacks);
+			foreach ($endCallbacks as $currCallback) {
+				call_user_func($currCallback);
 			}
 		}
 
