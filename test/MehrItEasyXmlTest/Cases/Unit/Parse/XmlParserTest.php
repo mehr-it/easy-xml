@@ -1189,6 +1189,23 @@
 			$this->assertSame(['a', 'x', 'x'], $values);
 		}
 
+		public function testCollectValue_defaultNull() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<rootNode>
+						<item>a</item>
+						<item></item>
+						<item/>
+						<item2>c</item2>
+					</rootNode>";
+
+			$parser = XmlParser::fromString($xml);
+
+			$this->assertSame($parser, $parser->collectValue('rootNode.item', $values, 'defaultNull'));
+			$parser->parse();
+
+			$this->assertSame(['a', null, null], $values);
+		}
+
 		public function testCollectValue_trim() {
 			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 					<rootNode>

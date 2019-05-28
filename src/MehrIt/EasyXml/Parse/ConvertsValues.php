@@ -94,7 +94,19 @@
 
 
 		/**
-		 * Returns the given default value if element is null, empty string or string only containing whitespaces
+		 * Returns null if value is null, empty string or string only containing whitespaces
+		 * @param string|null $value The value
+		 * @return string|null The converted value
+		 */
+		protected function convertDefaultNull(?string $value) {
+			if (trim($value) === '')
+				return null;
+
+			return $value;
+		}
+
+		/**
+		 * Returns the given default value if value is null, empty string or string only containing whitespaces
 		 * @param string $value The value
 		 * @param mixed|null $default The default value
 		 * @return string The converted value
