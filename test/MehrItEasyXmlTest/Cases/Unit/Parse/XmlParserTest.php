@@ -921,6 +921,29 @@
 			$this->assertSame('c', $b);
 		}
 
+		public function testFirst() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<rootNode>
+						<item><b>15</b><d>25</d></item>
+						<item><b>16</b><d>26</d></item>
+						<item><b>17</b><d>27</d></item>
+						<item2><b>18</b><d>28</d></item2>
+					</rootNode>";
+
+			$parser = XmlParser::fromString($xml);
+
+			$i = 0;
+			$this->assertSame($parser, $parser->first('rootNode.item', function (XmlParser $parser) use (&$i) {
+				++$i;
+				$parser->value('b', $v);
+				$parser->consume();
+				$this->assertSame('15', $v);
+			}));
+			$parser->parse();
+
+			$this->assertSame(1, $i);
+		}
+
 		public function testEach() {
 			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 					<rootNode>

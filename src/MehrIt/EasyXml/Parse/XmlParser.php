@@ -322,7 +322,7 @@
 			$this->assertParsingNotContinued();
 
 			if ($this->reader->nodeType !== XMLReader::ELEMENT)
-				throw new \RuntimeException('Cannot add element end callback for element of type ' . $this->nodeTypeName($this->reader->nodeType));
+				throw new RuntimeException('Cannot add element end callback for element of type ' . $this->nodeTypeName($this->reader->nodeType));
 
 			$this->endCallbacks[$this->depth][] = $callback;
 
@@ -408,6 +408,28 @@
 		 */
 		public function each(string $path, callable $handler, string $delimiter = '.') {
 			return $this->addCallback(new ElementStartCallback($this->parseElementPath($path, $delimiter), $handler));
+		}
+
+		/**
+		 * Invokes the given callback when parser points to the first element matching given path
+		 * @param string $path The path (relative to current element parser points to)
+		 * @param callable $handler The callback. Will receive this parser instance as argument
+		 * @param string $delimiter The path delimiter used
+		 * @return XmlParser This instance
+		 */
+		public function first(string $path, callable $handler, string $delimiter = '.') {
+
+			$parsed = false;
+
+			return $this->each($path, function(XmlParser $parser) use (&$parsed, $handler) {
+
+				if (!$parsed) {
+					call_user_func($handler, $parser);
+
+					$parsed = true;
+				}
+
+			}, $delimiter);
 		}
 
 		/**
