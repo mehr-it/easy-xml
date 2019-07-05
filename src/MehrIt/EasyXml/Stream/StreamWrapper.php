@@ -37,10 +37,18 @@
 
 		private static $resKeepOpen;
 
+		private static $ignoreClosedFlush;
+
 		/** @var resource */
 		private $inner;
 
 		private $keepOpen;
+
+		private $id;
+
+		public static function ignoreClosedFlush($id, $value = true) {
+			static::$ignoreClosedFlush[$id] = $value;
+		}
 
 		/**
 		 * @param resource $resource
@@ -62,8 +70,9 @@
 				$id = uniqid();
 			}
 
-			self::$resources[$id] = $resource;
-			self::$resKeepOpen[$id] = $keepOpen;
+			self::$resources[$id]         = $resource;
+			self::$resKeepOpen[$id]       = $keepOpen;
+			self::$ignoreClosedFlush[$id] = false;
 
 			return $id;
 		}
@@ -84,7 +93,7 @@
 
 		/**
 		 * @param $path
-		 * @return resource
+		 * @return bool
 		 */
 		private function getKeepOpenFromPath($path) {
 			$id = substr($path, 10);
@@ -97,11 +106,25 @@
 		}
 
 		/**
+		 * @param $path
+		 * @return bool
+		 */
+		private function getIgnoreClosedFlush() {
+
+			if (!isset(self::$ignoreClosedFlush[$this->id])) {
+				throw new \InvalidArgumentException('No resource registered for id: \'' . $this->id . '\'.');
+			}
+
+			return self::$ignoreClosedFlush[$this->id];
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function stream_open($path, $mode, $options, &$opened_path) {
 			$this->inner = $this->getInnerFromPath($path);
 			$this->keepOpen = $this->getKeepOpenFromPath($path);
+			$this->id = substr($path, 10);
 
 			return true;
 		}
@@ -128,7 +151,10 @@
 		 * @inheritdoc
 		 */
 		public function stream_flush() {
-			return fflush($this->inner);
+			if (!$this->getIgnoreClosedFlush() || is_resource($this->inner))
+				return fflush($this->inner);
+			else
+				return true;
 		}
 
 		/**

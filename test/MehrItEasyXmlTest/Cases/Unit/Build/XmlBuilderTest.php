@@ -1963,4 +1963,25 @@
 
 		}
 
+		public function testNoErrorOnDestructWhenStreamAlreadyClosed() {
+
+			$res = fopen('php://memory', 'w+');
+
+			$cb = function () use ($res) {
+				$builder = new XmlBuilder($res);
+
+				$builder->startDocument();
+				$builder->writeElement('root');
+				$builder->endDocument();
+
+				fclose($res);
+			};
+
+			$cb();
+
+			$this->expectNotToPerformAssertions();
+
+
+		}
+
 	}

@@ -51,6 +51,8 @@
 		protected $autoFlush = false;
 		protected $bufferSize = 0;
 
+		protected $streamWrapperId = null;
+
 		/**
 		 * Creates a new instance
 		 * @param string|null|resource $target The URI to write to, a resource or empty. If empty, the builder writes to memory
@@ -64,6 +66,7 @@
 				// resource (XMLWriter only supports URLs, so stream wrapper is used to create an URL for accessing the resource)
 				$id = StreamWrapper::register($target, null, true);
 				$this->_e($this->writer->openUri('wrapper://' . $id));
+				$this->streamWrapperId = $id;
 			}
 			elseif (is_string($target)) {
 				// URI
@@ -78,6 +81,17 @@
 
 			$this->inputEncoding = mb_internal_encoding();
 		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function __destruct() {
+
+			// The XML writer might still try to flush the inner stream. If it was already closed, we can now ignore the corresponding error here
+			if ($this->streamWrapperId)
+				StreamWrapper::ignoreClosedFlush($this->streamWrapperId);
+		}
+
 
 		/**
 		 * Activates automatic flushing
