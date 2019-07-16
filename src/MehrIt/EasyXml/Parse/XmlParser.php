@@ -9,6 +9,7 @@
 	use MehrIt\EasyXml\Contracts\XmlParserCallback;
 	use MehrIt\EasyXml\Contracts\XmlUnserialize;
 	use MehrIt\EasyXml\Exception\XmlException;
+	use MehrIt\EasyXml\Parse\Callbacks\CurrentElementValueCallback;
 	use MehrIt\EasyXml\Parse\Callbacks\ElementStartCallback;
 	use MehrIt\EasyXml\Parse\Callbacks\ElementValueCallback;
 	use MehrIt\EasyXml\Stream\StreamWrapper;
@@ -474,6 +475,18 @@
 		 */
 		public function value(string $path, &$out, $convert = null, string $delimiter = '.') {
 
+			// if the value of the current node is required, this is a special case and we need to
+			// use a different callback type which allows capturing the value without processing
+			// the opening element
+			if ($path == '') {
+				return $this->addCallback(new CurrentElementValueCallback([], function ($v) use (&$out, $convert) {
+					if ($convert !== null)
+						$v = $this->convertValue($v, $convert);
+
+					$out = $v;
+				}));
+			}
+
 			$parsed = false;
 
 			return $this->eachValue($path, function($v) use (&$out, &$parsed, $convert) {
@@ -626,8 +639,16 @@
 			$this->assertParsingNotContinued();
 
 			$callbackPath = $callback->path();
-			if (!array_filter($callbackPath))
-				throw new InvalidArgumentException('Path must not be empty');
+
+			$emptyPath = !array_filter($callbackPath);
+
+			if ($emptyPath) {
+				if ($this->elType() !== XMLReader::ELEMENT || $this->elSelfClosing())
+					throw new InvalidArgumentException('Path must not be empty if current element is not an opening element!');
+				if ($callback->types()[XMLReader::ELEMENT] ?? false)
+					throw new InvalidArgumentException('Path must not be empty if callback handles opening elements!');
+			}
+
 
 			$depth = $this->depth;
 
@@ -859,6 +880,9 @@
 
 			$path      = mb_convert_encoding($path, 'UTF-8');
 			$delimiter = mb_convert_encoding($delimiter, 'UTF-8');
+
+			if ($path == '')
+				return [];
 
 			$delEscaped = preg_quote($delimiter, '/');
 

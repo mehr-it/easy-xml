@@ -1613,6 +1613,33 @@
 			$this->assertSame('a', $value);
 		}
 
+		public function testValueCurrentElement() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<rootNode>
+						<item>1a<sub>x</sub>b<![CDATA[c]]><!--z-->d</item>
+						<item>2a<sub>x</sub>b<![CDATA[c]]><!--z-->d</item>
+					</rootNode>";
+
+			$parser = XmlParser::fromString($xml);
+
+			$out = null;
+			$i = 0;
+			$parser->each('rootNode.item', function(XmlParser $parser) use (&$out, &$i) {
+				$parser->value('', $out);
+
+				switch($i) {
+					case 1:
+						$this->assertEquals('1abcd', $out);
+				}
+
+				++$i;
+			});
+
+			$parser->parse();
+
+			$this->assertEquals('2abcd', $out);
+		}
+
 		public function testCollectAttribute() {
 			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 					<rootNode>
