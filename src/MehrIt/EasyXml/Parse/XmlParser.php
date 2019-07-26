@@ -479,12 +479,26 @@
 			// use a different callback type which allows capturing the value without processing
 			// the opening element
 			if ($path == '') {
-				return $this->addCallback(new CurrentElementValueCallback([], function ($v) use (&$out, $convert) {
+
+				if (!$this->elSelfClosing()) {
+					return $this->addCallback(new CurrentElementValueCallback([], function ($v) use (&$out, $convert) {
+						if ($convert !== null)
+							$v = $this->convertValue($v, $convert);
+
+						$out = $v;
+					}));
+				}
+				else {
+					// for self closing elements, we cannot add a callback but the output value is null anyways
+					$v = null;
+
 					if ($convert !== null)
 						$v = $this->convertValue($v, $convert);
 
 					$out = $v;
-				}));
+
+					return $this;
+				}
 			}
 
 			$parsed = false;
@@ -644,7 +658,7 @@
 
 			if ($emptyPath) {
 				if ($this->elType() !== XMLReader::ELEMENT || $this->elSelfClosing())
-					throw new InvalidArgumentException('Path must not be empty if current element is not an opening element!');
+					throw new InvalidArgumentException('Path must not be empty if current element is not an opening element or is self closing!');
 				if ($callback->types()[XMLReader::ELEMENT] ?? false)
 					throw new InvalidArgumentException('Path must not be empty if callback handles opening elements!');
 			}

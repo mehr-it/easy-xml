@@ -1640,6 +1640,32 @@
 			$this->assertEquals('2abcd', $out);
 		}
 
+		public function testValueCurrentElementSelfClosing() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<rootNode>
+						<item/>
+					</rootNode>";
+
+			$parser = XmlParser::fromString($xml);
+
+			$out = 'asd';
+			$i = 0;
+			$parser->each('rootNode.item', function(XmlParser $parser) use (&$out, &$i) {
+				$parser->value('', $out);
+
+				switch($i) {
+					case 1:
+						$this->assertEquals(null, $out);
+				}
+
+				++$i;
+			});
+
+			$parser->parse();
+
+			$this->assertEquals(null, $out);
+		}
+
 		public function testCollectAttribute() {
 			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 					<rootNode>
