@@ -18,6 +18,7 @@
 	use MehrIt\EasyXml\Contracts\XmlSerializable;
 	use MehrIt\EasyXml\Exception\XmlException;
 	use MehrIt\EasyXml\Stream\StreamWrapper;
+	use MehrIt\EasyXml\XmlErrors;
 	use RuntimeException;
 	use XMLWriter;
 
@@ -29,6 +30,8 @@
 	 */
 	class XmlBuilder
 	{
+		use XmlErrors;
+
 		/**
 		 * @var XMLWriter
 		 */
@@ -65,16 +68,22 @@
 			if (is_resource($target)) {
 				// resource (XMLWriter only supports URLs, so stream wrapper is used to create an URL for accessing the resource)
 				$id = StreamWrapper::register($target, null, true);
-				$this->_e($this->writer->openUri('wrapper://' . $id));
+				$this->withXmlErrorHandler(function() use ($id) {
+					return $this->writer->openUri('wrapper://' . $id);
+				});
 				$this->streamWrapperId = $id;
 			}
 			elseif (is_string($target)) {
 				// URI
-				$this->_e($this->writer->openUri($target));
+				$this->withXmlErrorHandler(function() use ($target) {
+					return $this->writer->openUri($target);
+				});
 			}
 			else {
 				// memory
-				$this->_e($this->writer->openMemory());
+				$this->withXmlErrorHandler(function() {
+					return $this->writer->openMemory();
+				});
 				$this->usingMemory = true;
 			}
 
@@ -119,13 +128,15 @@
 		 */
 		public function startDocument(string $version = '1.0', string $encoding = null, string $standalone = null) {
 			if ($this->stack !== [])
-				throw new XmlException('Cannot start a new document if document already created');
+				throw new XmlException(null,'Cannot start a new document if document already created');
 			$this->stack[] = 'doc';
 
 			if (!$encoding)
 				$encoding = 'UTF-8';
 
-			$this->_e($this->writer->startDocument($version, $encoding, $standalone));
+			$this->withXmlErrorHandler(function() use ($version, $encoding, $standalone) {
+				return $this->writer->startDocument($version, $encoding, $standalone);
+			});
 
 			return $this;
 		}
@@ -137,9 +148,9 @@
 		 */
 		public function endDocument() {
 			if (end($this->stack) !== 'doc')
-				throw new XmlException('Cannot end document because no document was started or a document element is still open');
+				throw new XmlException(null,'Cannot end document because no document was started or a document element is still open');
 
-			$this->_e($this->writer->endDocument());
+			$this->withXmlErrorHandler(function() { return $this->writer->endDocument(); });
 
 			// perform auto flush
 			$this->performAutoFlush(true);
@@ -185,9 +196,13 @@
 		 */
 		public function setIndent(bool $indent, string $indentString = "\t") {
 
-			$this->_e($this->writer->setIndent($indent));
+			$this->withXmlErrorHandler(function() use ($indent) {
+				return $this->writer->setIndent($indent);
+			});
 			if ($indent)
-				$this->_e($this->writer->setIndentString($indentString));
+				$this->withXmlErrorHandler(function() use ($indentString) {
+					return $this->writer->setIndentString($indentString);
+				});
 
 			return $this;
 		}
@@ -225,9 +240,9 @@
 		 */
 		public function startElement(string $name, array $attributes = [], bool $deduplicateNamespaces = true) {
 			if (!in_array(end($this->stack), ['el', 'doc']))
-				throw new XmlException('Cannot start element outside document or another element');
+				throw new XmlException(null,'Cannot start element outside document or another element');
 			if (end($this->stack) === 'doc' && $this->rootNodeExists)
-				throw new XmlException('Cannot create another element after root node');
+				throw new XmlException(null,'Cannot create another element after root node');
 			$this->stack[] = 'el';
 			$this->rootNodeExists = true;
 
@@ -239,10 +254,16 @@
 			[$prefix, $name, $uri] = $this->parseNamespace($name);
 
 			// start element
-			if ($prefix)
-				$this->_e($this->writer->startElementNs($prefix, $name, $uri));
-			else
-				$this->_e($this->writer->startElement($name));
+			if ($prefix) {
+				$this->withXmlErrorHandler(function () use ($prefix, $name, $uri) {
+					return $this->writer->startElementNs($prefix, $name, $uri);
+				});
+			}
+			else {
+				$this->withXmlErrorHandler(function () use ($name) {
+					return $this->writer->startElement($name);
+				});
+			}
 
 			// auto flush
 			$this->bufferSize += strlen($prefix . $name . $uri);
@@ -261,15 +282,15 @@
 		 */
 		public function endElement(bool $forceEndTag = false) {
 			if (end($this->stack) !== 'el')
-				throw new XmlException('No element started');
+				throw new XmlException(null,'No element started');
 			array_pop($this->stack);
 
 			array_pop($this->namespaces);
 
 			if (!$forceEndTag)
-				$this->_e($this->writer->endElement());
+				$this->withXmlErrorHandler(function() { return $this->writer->endElement(); });
 			else
-				$this->_e($this->writer->fullEndElement());
+				$this->withXmlErrorHandler(function() { return $this->writer->fullEndElement(); });
 
 			return $this;
 		}
@@ -297,7 +318,7 @@
 		 */
 		public function startAttribute(string $name) {
 			if (end($this->stack) !== 'el')
-				throw new XmlException('Cannot start attribute outside element');
+				throw new XmlException(null,'Cannot start attribute outside element');
 			$this->stack[] = 'attr';
 
 			$name = $this->encodeString($name);
@@ -307,14 +328,18 @@
 
 			// start element
 			if ($prefix) {
-				$this->_e($this->writer->startAttributeNs($prefix, $name, $uri));
+				$this->withXmlErrorHandler(function() use ($prefix, $name, $uri) {
+					return $this->writer->startAttributeNs($prefix, $name, $uri);
+				});
 
 				// mark beginning of new namespace attribute
 				if ($prefix == 'xmlns')
 					$this->startedAttributeDefinesNamespace = $name;
 			}
 			else {
-				$this->_e($this->writer->startAttribute($name));
+				$this->withXmlErrorHandler(function() use ($name) {
+					return $this->writer->startAttribute($name);
+				});
 			}
 
 			// auto flush
@@ -330,7 +355,7 @@
 		 */
 		public function endAttribute() {
 			if (end($this->stack) !== 'attr')
-				throw new XmlException('No attribute started');
+				throw new XmlException(null,'No attribute started');
 			array_pop($this->stack);
 
 			if ($this->startedAttributeDefinesNamespace) {
@@ -343,7 +368,7 @@
 				$this->startedAttributeValue            = '';
 			}
 
-			$this->_e($this->writer->endAttribute());
+			$this->withXmlErrorHandler(function() { return $this->writer->endAttribute(); });
 
 			return $this;
 		}
@@ -395,10 +420,10 @@
 		 */
 		public function startComment() {
 			if (!in_array(end($this->stack), ['el', 'doc']))
-				throw new XmlException('Cannot start comment outside document or element');
+				throw new XmlException(null,'Cannot start comment outside document or element');
 			$this->stack[] = 'comment';
 
-			$this->_e($this->writer->startComment());
+			$this->withXmlErrorHandler(function() { return $this->writer->startComment(); });
 
 			return $this;
 		}
@@ -409,10 +434,10 @@
 		 */
 		public function endComment() {
 			if (end($this->stack) !== 'comment')
-				throw new XmlException('No comment started');
+				throw new XmlException(null,'No comment started');
 			array_pop($this->stack);
 
-			$this->_e($this->writer->endComment());
+			$this->withXmlErrorHandler(function() { return $this->writer->endComment(); });
 
 			return $this;
 		}
@@ -437,10 +462,10 @@
 		 */
 		public function startCData() {
 			if (!in_array(end($this->stack), ['el']))
-				throw new XmlException('Cannot start CDATA outside element');
+				throw new XmlException(null,'Cannot start CDATA outside element');
 			$this->stack[] = 'cdata';
 
-			$this->_e($this->writer->startCdata());
+			$this->withXmlErrorHandler(function() { return $this->writer->startCdata(); });
 
 			return $this;
 		}
@@ -451,10 +476,10 @@
 		 */
 		public function endCData() {
 			if (end($this->stack) !== 'cdata')
-				throw new XmlException('No CDATA started');
+				throw new XmlException(null,'No CDATA started');
 			array_pop($this->stack);
 
-			$this->_e($this->writer->endCdata());
+			$this->withXmlErrorHandler(function() { return $this->writer->endCdata(); });
 
 			return $this;
 		}
@@ -479,14 +504,16 @@
 		 */
 		public function data(?string $data) {
 			if (end($this->stack) !== 'cdata')
-				throw new XmlException('Cannot append data outside CDATA block');
+				throw new XmlException(null,'Cannot append data outside CDATA block');
 
 			$data = str_replace(']]>', ']]]]><![CDATA[>', $data);
 
 			// even cdata must be in correct charset, so encode it
 			$data = $this->encodeString($data);
 
-			$this->_e($this->writer->text($data));
+			$this->withXmlErrorHandler(function() use ($data) {
+				return $this->writer->text($data);
+			});
 
 			// auto flush
 			$this->bufferSize += strlen($data);
@@ -502,10 +529,10 @@
 		 */
 		public function text(?string $content) {
 			if (!in_array(end($this->stack), ['el', 'attr', 'comment']))
-				throw new XmlException('Cannot append text outside element or attribute');
+				throw new XmlException(null,'Cannot append text outside element or attribute');
 
 			if (end($this->stack) == 'comment' && mb_strpos($content, '-->') !== false)
-				throw new XmlException('Comment must not contain sequence "-->"');
+				throw new XmlException(null,'Comment must not contain sequence "-->"');
 
 			$content = $this->encodeString($content);
 
@@ -513,7 +540,9 @@
 			if ($this->startedAttributeDefinesNamespace)
 				$this->startedAttributeValue .= $content;
 
-			$this->_e($this->writer->text($content));
+			$this->withXmlErrorHandler(function() use ($content) {
+				return $this->writer->text($content);
+			});
 
 			// auto flush
 			$this->bufferSize += strlen($content);
@@ -532,13 +561,15 @@
 
 			// DTD must be written before root node
 			if ($this->rootNodeExists)
-				throw new XmlException('Cannot create DTD after root node');
+				throw new XmlException(null,'Cannot create DTD after root node');
 
 			// encode
 			$name       = $this->encodeString($name);
 			$identifier = $this->encodeString($identifier);
 
-			$this->_e($this->writer->writeDtd($name, null, $identifier));
+			$this->withXmlErrorHandler(function() use ($name, $identifier) {
+				return $this->writer->writeDtd($name, null, $identifier);
+			});
 
 			return $this;
 		}
@@ -554,14 +585,16 @@
 
 			// DTD must be written before root node
 			if ($this->rootNodeExists)
-				throw new XmlException('Cannot create DTD after root node');
+				throw new XmlException(null,'Cannot create DTD after root node');
 
 			// encode
 			$name             = $this->encodeString($name);
 			$publicIdentifier = $this->encodeString($publicIdentifier);
 			$systemIdentifier = $this->encodeString($systemIdentifier);
 
-			$this->_e($this->writer->writeDtd($name, $publicIdentifier, $systemIdentifier));
+			$this->withXmlErrorHandler(function() use ($name, $publicIdentifier, $systemIdentifier) {
+				return $this->writer->writeDtd($name, $publicIdentifier, $systemIdentifier);
+			});
 
 			return $this;
 		}
@@ -716,7 +749,7 @@
 		 */
 		protected function _e($value) {
 			if ($value === false)
-				throw new XmlException('XMLWriter error');
+				throw new XmlException(null,'XMLWriter error');
 
 			return $this;
 		}
@@ -775,7 +808,7 @@
 
 				// check if prefix exists (this check is ignored for reserved prefixes because they do not have to be defined)
 				if (!$this->isReservedName($prefix) && !$this->isPrefixedDefined($prefix))
-					throw new XmlException("Prefix \"$prefix\" does not reference any namespace");
+					throw new XmlException(null,"Prefix \"$prefix\" does not reference any namespace");
 
 				return [$prefix, $name, null];
 			}

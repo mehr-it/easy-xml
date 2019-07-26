@@ -13,6 +13,7 @@
 	use MehrIt\EasyXml\Parse\Callbacks\ElementStartCallback;
 	use MehrIt\EasyXml\Parse\Callbacks\ElementValueCallback;
 	use MehrIt\EasyXml\Stream\StreamWrapper;
+	use MehrIt\EasyXml\XmlErrors;
 	use RuntimeException;
 	use XMLReader;
 
@@ -26,6 +27,7 @@
 		use NodeTypeNames;
 		use StringifiesPaths;
 		use ConvertsValues;
+		use XmlErrors;
 
 		/**
 		 * @var XMLReader
@@ -117,10 +119,10 @@
 
 				if (is_resource($source)) {
 					$id = StreamWrapper::register($source);
-					$this->_e($reader->open('wrapper://' . $id));
+					$this->e($reader->open('wrapper://' . $id));
 				}
 				else {
-					$this->_e($reader->open($source));
+					$this->e($reader->open($source));
 				}
 			}
 
@@ -250,7 +252,7 @@
 				if ($attrCount > 0) {
 					try {
 						for ($i = 0; $i < $attrCount; ++$i) {
-							$reader->moveToAttributeNo($i);
+							$this->e($reader->moveToAttributeNo($i));
 
 							$ns = $reader->namespaceURI;
 
@@ -263,7 +265,7 @@
 						}
 					}
 					finally {
-						$reader->moveToElement();
+						$this->e($reader->moveToElement());
 					}
 				}
 			}
@@ -343,9 +345,11 @@
 			$this->pathSegments = [];
 			$this->pathMatchStr = $this->pathDelimiter();
 
-			while ($this->next()) {
-				$this->handle();
-			}
+			$this->withXmlErrors(function() {
+				while ($this->next()) {
+					$this->handle();
+				}
+			});
 
 			return $this;
 		}
@@ -375,7 +379,7 @@
 			do {
 				// read next
 				if (!$this->next())
-					throw new XmlException('Unexpected end of XML document');
+					throw new XmlException(null, 'Unexpected end of XML document');
 
 				// stop parsing after this element, when our starting depth is reached and a closing element was read
 				if ($this->depth === $startDepth && $reader->nodeType === XMLReader::END_ELEMENT)
@@ -732,14 +736,14 @@
 				// we only read the subtree of current node, if this required (this avoids
 				// unnecessary parsing effort if node and content is not of interest)
 				if (!$this->shouldParseElement()) {
-					$this->_e($reader->next());
+					$this->e($reader->next());
 
 					// next operation closes current sibling and moves on - since we opened the path for the
 					// sibling already, we have to close it here right now
 					$this->popPath();
 				}
 				else {
-					$this->_e($reader->read());
+					$this->e($reader->read());
 				}
 
 
@@ -1052,18 +1056,6 @@
 			}
 		}
 
-
-			/**
-		 * Throws an XML exception if false is passed
-		 * @param mixed $value The value
-		 * @return $this
-		 */
-		protected function _e($value) {
-			if ($value === false)
-				throw new XmlException('XMLParser error');
-
-			return $this;
-		}
 
 		/**
 		 * Encodes the given string for output

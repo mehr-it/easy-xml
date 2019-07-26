@@ -6,6 +6,7 @@
 
 
 	use MehrIt\EasyXml\Contracts\XmlUnserialize;
+	use MehrIt\EasyXml\Exception\XmlException;
 	use MehrIt\EasyXml\Parse\Callbacks\AbstractCallback;
 	use MehrIt\EasyXml\Parse\Callbacks\ElementStartCallback;
 	use MehrIt\EasyXml\Parse\NodeTypeNames;
@@ -1900,6 +1901,49 @@
 			$this->assertSame('b', $values[1]->value);
 
 			$this->assertCount(2, $values);
+		}
+
+
+		public function testParseNoXml() {
+			$xml = "this is not xml";
+
+			libxml_use_internal_errors(true);
+
+			$parser = XmlParser::fromString($xml);
+
+			try {
+				$parser->parse();
+
+				$this->fail('Expected exception was not thrown');
+			}
+			catch (XmlException $ex) {
+
+				$this->assertContains('Document is empty', $ex->getMessage());
+				$this->assertInstanceOf(\LibXMLError::class, $ex->getXmlError());
+			}
+
+		}
+
+		public function testParseXmlNotEnded() {
+			$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+					<rootNode>
+						<item><sub>>";
+
+			libxml_use_internal_errors(true);
+
+			$parser = XmlParser::fromString($xml);
+
+			try {
+				$parser->parse();
+
+				$this->fail('Expected exception was not thrown');
+			}
+			catch (XmlException $ex) {
+
+				$this->assertContains('at the end of the document', $ex->getMessage());
+				$this->assertInstanceOf(\LibXMLError::class, $ex->getXmlError());
+			}
+
 		}
 
 

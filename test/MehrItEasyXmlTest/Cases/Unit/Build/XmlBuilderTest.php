@@ -1984,4 +1984,15 @@
 
 		}
 
+		public function testWriteInvalidElementName() {
+			$builder = new XmlBuilder();
+
+			$builder->startDocument();
+
+			$this->expectException(XmlException::class);
+			$this->expectExceptionMessage('Invalid Element Name');
+
+			$builder->startElement('<root');
+		}
+
 	}
