@@ -134,7 +134,7 @@
 		 */
 		public function stream_close() {
 			// check if the inner stream should be closed
-			if (!$this->keepOpen)
+			if (!$this->keepOpen && is_resource($this->inner))
 				return fclose($this->inner);
 			else
 				return true;
