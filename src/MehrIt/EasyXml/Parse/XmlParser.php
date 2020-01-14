@@ -97,7 +97,7 @@
 
 			// we create a temporary stream, write XML to it and rewind
 			$res = fopen($tempUri, 'w+');
-			if (!fwrite($res, $xml))
+			if (fwrite($res, $xml) === false)
 				throw new RuntimeException("Could not write XML to temporary \"$tempUri\"");
 			if (!rewind($res))
 				throw new RuntimeException("Could not rewind temporary XML stream \"$tempUri\"");
