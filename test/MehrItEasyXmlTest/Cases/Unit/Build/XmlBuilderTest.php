@@ -970,6 +970,104 @@
 			$this->assertSame("{$this->docStart}<root a:attr=\"val\" xmlns:a=\"http://mynamespace.de/xml\"/>", $builder->output());
 		}
 
+		public function testWriteAttribute_date() {
+			$builder = new XmlBuilder();
+
+			$var = new \DateTime();
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"{$var->format('Y-m-d\TH:i:sP')}\"", $builder->output());
+		}
+
+		public function testWriteAttribute_integer() {
+			$builder = new XmlBuilder();
+
+			$var = 45;
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"45\"", $builder->output());
+		}
+
+		public function testWriteAttribute_string() {
+			$builder = new XmlBuilder();
+
+			$var = 'asd';
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"asd\"", $builder->output());
+		}
+
+		public function testWriteAttribute_float() {
+			$builder = new XmlBuilder();
+
+			$var = 45.80;
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"45.8\"", $builder->output());
+		}
+
+		public function testWriteAttribute_null() {
+			$builder = new XmlBuilder();
+
+			$var = null;
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"\"", $builder->output());
+		}
+
+		public function testWriteAttribute_boolean_true() {
+			$builder = new XmlBuilder();
+
+			$var = true;
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"true\"", $builder->output());
+		}
+
+		public function testWriteAttribute_boolean_false() {
+			$builder = new XmlBuilder();
+
+			$var = false;
+
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->writeAttribute('attr', $var));
+
+			$this->assertSame("{$this->docStart}<root attr=\"false\"", $builder->output());
+		}
+
+
 		public function testWriteAttribute_handler_date() {
 			$builder = new XmlBuilder();
 
@@ -1069,6 +1167,7 @@
 
 			$this->assertSame("{$this->docStart}<root attr=\"Null handled\"", $builder->output());
 		}
+
 
 		public function testWriteAttribute_handler_boolean() {
 			$builder = new XmlBuilder();
@@ -1317,10 +1416,14 @@
 
 			$builder->startDocument();
 
+			$date = new \DateTime();
+
 			$this->assertSame($builder, $builder->write([
 				'<myTag' => [
 					'@attr1' => 15,
 					'@attr2' => 'x',
+					'@attr3' => true,
+					'@attr4' => $date,
 					'@' => [
 						[
 							'>' => 'innerTag',
@@ -1332,7 +1435,7 @@
 				]
 			]));
 
-			$this->assertSame("{$this->docStart}<myTag attr1=\"15\" attr2=\"x\"><innerTag>another Text</innerTag><anotherTag>lastTag</anotherTag></myTag>", $builder->output());
+			$this->assertSame("{$this->docStart}<myTag attr1=\"15\" attr2=\"x\" attr3=\"true\" attr4=\"{$date->format('Y-m-d\TH:i:sP')}\"><innerTag>another Text</innerTag><anotherTag>lastTag</anotherTag></myTag>", $builder->output());
 		}
 
 		public function testWrite_arrayWithContent_closure() {
@@ -1404,6 +1507,84 @@
 			$this->assertSame($builder, $builder->write($ser));
 
 			$this->assertSame("{$this->docStart}<!--anotherComment-->", $builder->output());
+		}
+
+		public function testWrite_date() {
+			$builder = new XmlBuilder();
+
+			$dt = new \DateTime();
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>{$dt->format('Y-m-d\TH:i:sP')}", $builder->output());
+		}
+
+		public function testWrite_integer() {
+			$builder = new XmlBuilder();
+
+			$dt = 45;
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>45", $builder->output());
+		}
+
+		public function testWrite_string() {
+			$builder = new XmlBuilder();
+
+			$dt = 'asd';
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>asd", $builder->output());
+		}
+
+		public function testWrite_float() {
+			$builder = new XmlBuilder();
+
+			$dt = 45.80;
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>45.8", $builder->output());
+		}
+
+		public function testWrite_boolean_true() {
+			$builder = new XmlBuilder();
+
+			$dt = true;
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>true", $builder->output());
+		}
+
+		public function testWrite_boolean_false() {
+			$builder = new XmlBuilder();
+
+			$dt = false;
+
+			$builder->startDocument();
+			$builder->startElement('root');
+
+			$this->assertSame($builder, $builder->write($dt));
+
+			$this->assertSame("{$this->docStart}<root>false", $builder->output());
 		}
 
 		public function testWrite_handler_date() {

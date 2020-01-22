@@ -27,7 +27,8 @@
     "ext-xmlwriter": "*",
     "ext-mbstring": "*",
     "ext-xmlreader": "*",
-    "ext-libxml": "*"
+    "ext-libxml": "*",
+    "mehr-it/php-decimals": "^2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.4"

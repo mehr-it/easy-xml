@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+
 	/**
 	 * Created by PhpStorm.
 	 * User: chris
@@ -10,6 +11,7 @@
 
 
 	use Closure;
+	use DateTimeInterface;
 	use InvalidArgumentException;
 	use MehrIt\EasyXml\Build\Serialize\EachSerializer;
 	use MehrIt\EasyXml\Build\Serialize\MapSerializer;
@@ -19,10 +21,9 @@
 	use MehrIt\EasyXml\Exception\XmlException;
 	use MehrIt\EasyXml\Stream\StreamWrapper;
 	use MehrIt\EasyXml\XmlErrors;
+	use MehrIt\PhpDecimals\Decimals;
 	use RuntimeException;
 	use XMLWriter;
-
-	/** @noinspection PhpInconsistentReturnPointsInspection */
 
 	/**
 	 * Builder for creating XML (uses XMLWriter internally)
@@ -390,6 +391,8 @@
 			// apply handler if exists
 			if ($handler = ($this->attributeHandlers[$handlerName] ?? null))
 				$value = $handler($value, $this);
+			else
+				$value = $this->convertToXsdDataType($value);
 
 
 			$this->startAttribute($name);
@@ -682,18 +685,18 @@
 					$handlerName = ltrim(get_class($data), '\\');
 
 
-				// use handler or add as text if not handler exists
+				// use handler or add as text if no handler exists
 				if ($handler = ($this->handlers[$handlerName] ?? null))
 					$handler($data, $this);
 				else
-					$this->text((string)$data);
+					$this->text($this->convertToXsdDataType($data));
 			}
 
 
 			return $this;
 		}
 
-		/**
+			/**
 		 * Calls the given callback for each item of the collection with this builder
 		 * @param \Traversable|array $collection The collection
 		 * @param callable $callback The callback. Will receive the builder, the value and the key
@@ -951,6 +954,33 @@
 			}
 		}
 
+		/**
+		 * Writes the given value as XSD data type
+		 * @param mixed $value The value
+		 * @return string The XSD data string
+		 */
+		protected function convertToXsdDataType($value): string {
+
+			if (is_object($value)) {
+				if ($value instanceof DateTimeInterface)
+					// https://www.w3schools.com/xml/schema_dtypes_date.asp
+					return $value->format('Y-m-d\TH:i:sP');
+			}
+			else {
+				switch (gettype($value)) {
+					case 'boolean':
+						// https://www.w3schools.com/xml/schema_dtypes_misc.asp
+						return ($value ? 'true' : 'false');
+
+					case 'double':
+						// https://www.w3schools.com/xml/schema_dtypes_numeric.asp
+						return Decimals::parse($value);
+
+				}
+			}
+
+			return (string)$value;
+		}
 
 
 	}
