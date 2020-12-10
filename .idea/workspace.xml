@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ee5fa908-b0e7-46b3-82d9-a71887c43081" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/phpunit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MehrIt/EasyXml/XmlErrors.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/MehrIt/EasyXml/XmlErrors.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Build/XmlBuilderTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Build/XmlBuilderTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Parse/XmlParserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Parse/XmlParserTest.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode />
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="Homestead - Easy-XML">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/mehr-it/php-decimals" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="1PnA59pxkQxdJr0GxXregTgn7pb" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/phpunit.xml" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="php.override.implement.member.chooser.php.doc" value="INHERIT" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Multirun.All">
+    <configuration name="All" type="Multirun" factoryName="Multirun" separateTabs="false" reuseTabsWithFailures="true" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
+      <runConfiguration name="All - PHP 7.3" type="PHPUnit" />
+      <runConfiguration name="All - PHP 7.4" type="PHPUnit" />
+      <runConfiguration name="All - PHP 8.0" type="PHPUnit" />
+      <method v="2" />
+    </configuration>
+    <configuration name="All - PHP 7.3" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="Homestead PHP 7.3" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="All - PHP 7.4" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="Homestead PHP 7.4" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="All - PHP 8.0" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="Homestead PHP 8.0" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="Homestead PHP 8.0" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Multirun.All" />
+      <item itemvalue="PHPUnit.All - PHP 7.3" />
+      <item itemvalue="PHPUnit.All - PHP 7.4" />
+      <item itemvalue="PHPUnit.All - PHP 8.0" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ee5fa908-b0e7-46b3-82d9-a71887c43081" name="Default Changelist" comment="" />
+      <created>1551773846993</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1551773846993</updated>
+      <workItem from="1551773848333" duration="68659000" />
+      <workItem from="1552048033905" duration="599000" />
+      <workItem from="1552297729964" duration="595000" />
+      <workItem from="1552481785676" duration="1381000" />
+      <workItem from="1552989490770" duration="599000" />
+      <workItem from="1553126322872" duration="1806000" />
+      <workItem from="1553844657290" duration="596000" />
+      <workItem from="1554301525841" duration="25000" />
+      <workItem from="1554732944686" duration="2085000" />
+      <workItem from="1554794346106" duration="598000" />
+      <workItem from="1555053751796" duration="599000" />
+      <workItem from="1555315092646" duration="599000" />
+      <workItem from="1558448670688" duration="76716000" />
+      <workItem from="1558682453645" duration="56270000" />
+      <workItem from="1560857586652" duration="7000" />
+      <workItem from="1561122380263" duration="606000" />
+      <workItem from="1561672018030" duration="599000" />
+      <workItem from="1562002311472" duration="4056000" />
+      <workItem from="1562650712216" duration="630000" />
+      <workItem from="1563262366003" duration="19581000" />
+      <workItem from="1566499302382" duration="2619000" />
+      <workItem from="1568584369101" duration="6000" />
+      <workItem from="1572450245261" duration="2047000" />
+      <workItem from="1578993182582" duration="8331000" />
+      <workItem from="1604405775291" duration="3639000" />
+      <workItem from="1605218947316" duration="2307000" />
+      <workItem from="1607589909246" duration="818000" />
+    </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1551888330150</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1551888330150</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add array syntax for tag name as key and value holding the attributes">
+      <created>1551893457407</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1551893457407</updated>
+    </task>
+    <task id="LOCAL-00003" summary="added ternary serializer">
+      <created>1551898037158</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1551898037158</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added build functions">
+      <created>1551902027038</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1551902027038</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added support for writing to resources">
+      <created>1551941243662</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1551941243662</updated>
+    </task>
+    <task id="LOCAL-00006" summary="added autoFlush">
+      <created>1551947172039</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1551947172039</updated>
+    </task>
+    <task id="LOCAL-00007" summary="FIX: resource is not closed on destruction when using XMLBuilder with resources">
+      <created>1551970572593</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1551970572593</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added support for writing external DTDs">
+      <created>1558517809330</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1558517809330</updated>
+    </task>
+    <task id="LOCAL-00009" summary="FIX: added missing charset conversion for cdata content">
+      <created>1558700955916</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1558700955916</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added parser">
+      <created>1558953385931</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1558953385931</updated>
+    </task>
+    <task id="LOCAL-00011" summary="deduplicate xmlns if same namespace">
+      <created>1558965648884</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1558965648884</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added defaultNull converter">
+      <created>1559021006666</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1559021006666</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added element end callbacks (elEnd)">
+      <created>1559023405130</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1559023405130</updated>
+    </task>
+    <task id="LOCAL-00014" summary="added first method to parser">
+      <created>1559025634984</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1559025634984</updated>
+    </task>
+    <task id="LOCAL-00015" summary="FIX: avoid XmlBuilder error on destruct, when inner stream already closed">
+      <created>1562314920153</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1562314920153</updated>
+    </task>
+    <task id="LOCAL-00016" summary="added ability to parse value of currently opening element">
+      <created>1563264802812</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1563264802812</updated>
+    </task>
+    <task id="LOCAL-00017" summary="FIX: parsing value of current element caused error when element was self closing">
+      <created>1564143601344</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1564143601344</updated>
+    </task>
+    <task id="LOCAL-00018" summary="improved error management: writer/reader errors are thrown as XMLErrors">
+      <created>1564184962923</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1564184962923</updated>
+    </task>
+    <task id="LOCAL-00019" summary="StreamWrapper: avoid error when closing already closed stream">
+      <created>1572450325938</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1572450325938</updated>
+    </task>
+    <task id="LOCAL-00020" summary="FIX: XmlParser::fromString threw write error, when XML string is empty">
+      <created>1579011419304</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1579011419304</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Serializes native types as XSD data types by default">
+      <created>1579720088859</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1579720088859</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial commit" />
+    <MESSAGE value="add array syntax for tag name as key and value holding the attributes" />
+    <MESSAGE value="added ternary serializer" />
+    <MESSAGE value="added build functions" />
+    <MESSAGE value="added support for writing to resources" />
+    <MESSAGE value="added autoFlush" />
+    <MESSAGE value="FIX: resource is not closed on destruction when using XMLBuilder with resources" />
+    <MESSAGE value="added support for writing external DTDs" />
+    <MESSAGE value="FIX: added missing charset conversion for cdata content" />
+    <MESSAGE value="Added parser" />
+    <MESSAGE value="deduplicate xmlns if same namespace" />
+    <MESSAGE value="added defaultNull converter" />
+    <MESSAGE value="Added element end callbacks (elEnd)" />
+    <MESSAGE value="added first method to parser" />
+    <MESSAGE value="FIX: avoid XmlBuilder error on destruct, when inner stream already closed" />
+    <MESSAGE value="added ability to parse value of currently opening element" />
+    <MESSAGE value="FIX: parsing value of current element caused error when element was self closing" />
+    <MESSAGE value="improved error management: writer/reader errors are thrown as XMLErrors" />
+    <MESSAGE value="StreamWrapper: avoid error when closing already closed stream" />
+    <MESSAGE value="FIX: XmlParser::fromString threw write error, when XML string is empty" />
+    <MESSAGE value="Serializes native types as XSD data types by default" />
+    <option name="LAST_COMMIT_MESSAGE" value="Serializes native types as XSD data types by default" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PHPUnitRunConfigurationType">
+        <watch expression="$reader-&gt;nodeType" />
+        <watch expression="$this-&gt;callbacks[$pathMatch]" />
+        <watch expression="$parser-&gt;elType()" language="PHP" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>$parser-&gt;elType()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$reader-&gt;name</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>$reader-&gt;name</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+</project>

@@ -1918,7 +1918,7 @@
 			}
 			catch (XmlException $ex) {
 
-				$this->assertContains('Document is empty', $ex->getMessage());
+				$this->assertStringContainsString('Document is empty', $ex->getMessage());
 				$this->assertInstanceOf(\LibXMLError::class, $ex->getXmlError());
 			}
 
@@ -1940,7 +1940,7 @@
 			}
 			catch (XmlException $ex) {
 
-				$this->assertContains('at the end of the document', $ex->getMessage());
+				$this->assertStringContainsString('at the end of the document', $ex->getMessage());
 				$this->assertInstanceOf(\LibXMLError::class, $ex->getXmlError());
 			}
 

@@ -5,6 +5,7 @@
 
 
 	use MehrIt\EasyXml\Exception\XmlException;
+	use Throwable;
 
 	trait XmlErrors
 	{
@@ -54,15 +55,21 @@
 		 */
 		protected function withXmlErrorHandler(callable $callback) {
 
-			set_error_handler(function (int $errorNumber, string $errorString) {
+			$errorHandler = function (int $errorNumber, string $errorString) {
 
 				$errorString = trim(preg_replace('/XMLWriter::.*?\(\):/', '', $errorString));
 
 				throw new XmlException(null, $errorString, $errorNumber);
 
-			}, E_ALL | E_STRICT);
+			};
+
+
+			set_error_handler($errorHandler, E_ALL | E_STRICT);
 			try {
 				return call_user_func($callback);
+			}
+			catch(Throwable $ex) {
+				$errorHandler($ex->getCode(), $ex->getMessage());
 			}
 			finally {
 				restore_error_handler();
