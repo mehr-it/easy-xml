@@ -846,7 +846,7 @@
 		 * Invalidates the subtree callback cache
 		 */
 		protected function invalidateSubtreeCallbacks() {
-			$this->subtreeCallbacks[] = [];
+			$this->subtreeCallbacks = [];
 		}
 
 		/**
