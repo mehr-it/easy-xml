@@ -895,10 +895,7 @@
 		 * @return string[] The path segments
 		 */
 		protected function parseElementPath(string $path, string $delimiter = '.'): array {
-
-			$path      = mb_convert_encoding($path, 'UTF-8');
-			$delimiter = mb_convert_encoding($delimiter, 'UTF-8');
-
+			
 			if ($path == '')
 				return [];
 
@@ -911,13 +908,13 @@
 
 			foreach ($segments as &$name) {
 
-				if (mb_substr($name, 0, 1) != '{') {
+				if ($name[0] !== '{') {
 
 					$prefix = null;
-					if (($pos = mb_strpos($name, ':', 0)) !== false) {
+					if (($pos = strpos($name, ':')) !== false) {
 
-						$prefix = mb_substr($name, 0, $pos);
-						$name   = mb_substr($name, $pos + 1);
+						$prefix = substr($name, 0, $pos);
+						$name   = substr($name, $pos + 1);
 					}
 
 					$uri = $this->resolvePrefixUri($prefix);
@@ -939,26 +936,24 @@
 		 */
 		protected function parseAttributeName(string $name) : array {
 
-			$name = mb_convert_encoding($name, 'UTF-8');
-
-			if (mb_substr($name, 0, 1) === '{') {
+			if ($name[0] === '{') {
 				// uri
-
-				$closingPos = mb_strpos($name, '}', 0);
+				
+				$closingPos = strpos($name, '}');
 
 				if ($closingPos > 1) {
-					$uri  = mb_substr($name, 1, $closingPos - 1);
-					$name = mb_substr($name, $closingPos + 1);
+					$uri  = substr($name, 1, $closingPos - 1);
+					$name = substr($name, $closingPos + 1);
 
 					return [$uri !== '' ? $uri : null, $name];
 				}
 			}
 
-			if (($pos = mb_strpos($name, ':', 0)) !== false) {
+			if (($pos = strpos($name, ':')) !== false) {
 				// prefix
 
-				$prefix = mb_substr($name, 0, $pos);
-				$name   = mb_substr($name, $pos + 1);
+				$prefix = substr($name, 0, $pos);
+				$name   = substr($name, $pos + 1);
 
 				return [$this->resolvePrefixUri($prefix, false), $name];
 			}

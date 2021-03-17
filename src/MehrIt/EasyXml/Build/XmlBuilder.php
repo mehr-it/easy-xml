@@ -534,7 +534,7 @@
 			if (!in_array(end($this->stack), ['el', 'attr', 'comment']))
 				throw new XmlException(null,'Cannot append text outside element or attribute');
 
-			if (end($this->stack) == 'comment' && mb_strpos($content, '-->') !== false)
+			if (end($this->stack) == 'comment' && strpos($content, '-->') !== false)
 				throw new XmlException(null,'Comment must not contain sequence "-->"');
 
 			$content = $this->encodeString($content);
@@ -789,14 +789,14 @@
 		protected function parseNamespace(string $name) {
 
 			// check for URI notation
-			if (mb_substr($name, 0, 1, 'UTF-8') == '{') {
+			if ($name[0] == '{') {
 
-				$closingPos = mb_strpos($name, '}', 0, 'UTF-8');
+				$closingPos = strpos($name, '}');
 
 				if ($closingPos > 1) {
 					$isNewPrefix = false;
-					$uri    = mb_substr($name, 1, $closingPos - 1, 'UTF-8');
-					$name   = mb_substr($name, $closingPos + 1);
+					$uri    = substr($name, 1, $closingPos - 1);
+					$name   = substr($name, $closingPos + 1);
 					$prefix = $this->getPrefixForNamespace($uri, $isNewPrefix);
 
 					return [$prefix, $name, ($isNewPrefix ? $uri : null)];
@@ -804,10 +804,10 @@
 			}
 
 			// check for prefix notation
-			if ($pos = mb_strpos($name, ':', 0, 'UTF-8')) {
+			if ($pos = strpos($name, ':')) {
 
-				$prefix = mb_substr($name, 0, $pos);
-				$name   = mb_substr($name, $pos + 1);
+				$prefix = substr($name, 0, $pos);
+				$name   = substr($name, $pos + 1);
 
 				// check if prefix exists (this check is ignored for reserved prefixes because they do not have to be defined)
 				if (!$this->isReservedName($prefix) && !$this->isPrefixedDefined($prefix))

@@ -112,4 +112,9 @@ your XML:
 		});
 	
 	
+## Upgrade notes
 
+### 2.x
+- Starting with version 2.x, all given paths and attribute name
+are expected to be UTF-8 encoded. Automatic encoding conversion
+was removed to increase performance.
