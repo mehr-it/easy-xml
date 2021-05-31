@@ -15,7 +15,7 @@
 		protected function pathDelimiter() {
 			return $this->pathDelimiter !== null ?
 				$this->pathDelimiter :
-				($this->pathDelimiter = mb_convert_encoding('>', 'UTF-8'));
+				($this->pathDelimiter = '>');
 		}
 
 		/**
