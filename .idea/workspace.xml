@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="ee5fa908-b0e7-46b3-82d9-a71887c43081" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/phpunit.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MehrIt/EasyXml/XmlErrors.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/MehrIt/EasyXml/XmlErrors.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Build/XmlBuilderTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Build/XmlBuilderTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Parse/XmlParserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit/Parse/XmlParserTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/easy-xml.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/easy-xml.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Parse/XmlParser.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parse/XmlParser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Cases/Unit/Parse/XmlParserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/Cases/Unit/Parse/XmlParserTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +25,17 @@
     <option name="PUSH_TAGS">
       <GitPushTagMode />
     </option>
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="Homestead - Easy-XML">
     <include_path>
@@ -57,6 +71,9 @@
       <path value="$PROJECT_DIR$/vendor/mehr-it/php-decimals" />
     </include_path>
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="1PnA59pxkQxdJr0GxXregTgn7pb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -64,25 +81,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/phpunit.xml" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="php.override.implement.member.chooser.php.doc" value="INHERIT" />
-    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Multirun.All.executor&quot;: &quot;Run&quot;,
+    &quot;PHPUnit.All - PHP 7.3.executor&quot;: &quot;Run&quot;,
+    &quot;PHPUnit.All - PHP 7.4.executor&quot;: &quot;Run&quot;,
+    &quot;PHPUnit.All - PHP 8.0.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/chris/web_workspace/mehr-it/easy-xml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/test" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
   </component>
   <component name="RunManager" selected="Multirun.All">
-    <configuration name="All" type="Multirun" factoryName="Multirun" separateTabs="false" reuseTabsWithFailures="true" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
+    <configuration name="All" type="Multirun" separateTabs="false" reuseTabsWithFailures="true" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
       <runConfiguration name="All - PHP 7.3" type="PHPUnit" />
       <runConfiguration name="All - PHP 7.4" type="PHPUnit" />
       <runConfiguration name="All - PHP 8.0" type="PHPUnit" />
@@ -94,7 +120,7 @@
           <option name="interpreterName" value="Homestead PHP 7.3" />
         </PhpTestInterpreterSettings>
       </CommandLine>
-      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/Cases/Unit" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
     <configuration name="All - PHP 7.4" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -103,7 +129,7 @@
           <option name="interpreterName" value="Homestead PHP 7.4" />
         </PhpTestInterpreterSettings>
       </CommandLine>
-      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/Cases/Unit" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
     <configuration name="All - PHP 8.0" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -112,7 +138,16 @@
           <option name="interpreterName" value="Homestead PHP 8.0" />
         </PhpTestInterpreterSettings>
       </CommandLine>
-      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/MehrItEasyXmlTest/Cases/Unit" use_alternative_configuration_file="true" />
+      <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/Cases/Unit" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="XmlParserTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="Homestead PHP 8.0" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <TestRunner class="MehrItEasyXmlTest\Cases\Unit\Parse\XmlParserTest" configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/test/Cases/Unit" file="$PROJECT_DIR$/test/Cases/Unit/Parse/XmlParserTest.php" scope="Class" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -129,7 +164,20 @@
       <item itemvalue="PHPUnit.All - PHP 7.3" />
       <item itemvalue="PHPUnit.All - PHP 7.4" />
       <item itemvalue="PHPUnit.All - PHP 8.0" />
+      <item itemvalue="PHPUnit.XmlParserTest" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="PHPUnit.XmlParserTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-php-predefined-ba97393d7c68-b4dcf6bb9de9-com.jetbrains.php.sharedIndexes-PS-233.13135.108" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -168,7 +216,13 @@
       <workItem from="1578993182582" duration="8331000" />
       <workItem from="1604405775291" duration="3639000" />
       <workItem from="1605218947316" duration="2307000" />
-      <workItem from="1607589909246" duration="818000" />
+      <workItem from="1607589909246" duration="1118000" />
+      <workItem from="1615885641080" duration="10484000" />
+      <workItem from="1622186969782" duration="21386000" />
+      <workItem from="1625687251759" duration="1866000" />
+      <workItem from="1625735042207" duration="17000" />
+      <workItem from="1631514728219" duration="6019000" />
+      <workItem from="1707309146968" duration="11425000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1551888330150</created>
@@ -317,22 +371,48 @@
       <option name="project" value="LOCAL" />
       <updated>1579720088859</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="added PHP 8 compatibility">
+      <created>1607590753764</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1607590753764</updated>
+    </task>
+    <task id="LOCAL-00023" summary="FIX: memory leak">
+      <created>1615977636721</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1615977636721</updated>
+    </task>
+    <task id="LOCAL-00024" summary="improved performance by removing UTF-8 conversion">
+      <created>1615983933542</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1615983933542</updated>
+    </task>
+    <task id="LOCAL-00025" summary="use PSR-4">
+      <created>1622187359730</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1622187359730</updated>
+    </task>
+    <task id="LOCAL-00026" summary="removed useless mb_convert call">
+      <created>1622473851910</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1622473851910</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -347,10 +427,17 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initial commit" />
     <MESSAGE value="add array syntax for tag name as key and value holding the attributes" />
     <MESSAGE value="added ternary serializer" />
     <MESSAGE value="added build functions" />
@@ -371,7 +458,12 @@
     <MESSAGE value="StreamWrapper: avoid error when closing already closed stream" />
     <MESSAGE value="FIX: XmlParser::fromString threw write error, when XML string is empty" />
     <MESSAGE value="Serializes native types as XSD data types by default" />
-    <option name="LAST_COMMIT_MESSAGE" value="Serializes native types as XSD data types by default" />
+    <MESSAGE value="added PHP 8 compatibility" />
+    <MESSAGE value="FIX: memory leak" />
+    <MESSAGE value="improved performance by removing UTF-8 conversion" />
+    <MESSAGE value="use PSR-4" />
+    <MESSAGE value="removed useless mb_convert call" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed useless mb_convert call" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
